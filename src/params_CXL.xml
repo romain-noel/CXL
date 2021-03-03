@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--no need to escape <code> & such in comments-->
+
+<InputCommands type="CXL" Name="TestCase VK1 Re=0.5">
+	<get_mesh name="mesh1">
+		<construct_mesh synthetical_case="Cylinder" dx="250" dy="75" dz="1"/>
+		<type_mesh type="image">
+			<color_index_image>	
+				<color_index index="11" RGBN="(1.00 , 1.00 , 1.00)"/>
+				<color_index index="12" RGBN="(1.00 , 0.00 , 0.00)"/>
+				<color_index index="13" RGBN="(0.00 , 0.00 , 1.00)"/>
+				<color_index index="14" RGBN="(0.00 , 1.00 , 0.00)"/>	
+			</color_index_image>	
+			<scale dx="1" dy="1" dz="1"/>	
+		</type_mesh>
+	</get_mesh>
+	
+	<get_model name="model1">
+		<mesh name="mesh1"/>
+		<phase_field nb_phases="1"/>
+		<materials>
+			<newtonian_fluid color_index="11" phase_index="1" density="0.1" viscosity="0.0029"/>
+		</materials>
+		<boundaries>
+			<interface type="Bounce_back" color_index="12" phase_index="1"/>
+			<periodicity x="false" y="false" z="false" />
+		</boundaries>
+	</get_model>
+	
+	<get_load name="load1">
+		<mesh name="mesh1"/>
+		<initial_state>
+			<velocity value="(0.05 ; 0.0 ; 0.0)" color_index="11" />
+		</initial_state>
+		<boundaries>
+			<Dirichlet type="Poiseuil_e_cst" color_index="13" phase_index="1" center="(1, 37.5, 1)" normal="(1.0, 0.0, 0.0)" dimensions="(inf, 75, inf)" vector="(0.0500, 0.0, 0.0)"/>
+			<Dirichlet type="Poiseuil_e_cst" color_index="14" phase_index="1" center="(1, 37.5, 1)" normal="(1.0, 0.0, 0.0)" dimensions="(inf, 75, inf)" vector="(0.0500, 0.0, 0.0)"/>
+		</boundaries>
+		<forces>
+		</forces>
+	</get_load>
+	
+	<dyna_time>
+		<model name="model1"/>
+		<load name="load1"/>
+		<time_integration type="explicit"/>
+		<time nb_iteration="4000" scale="1"/>
+		<method name="LBM">
+			<schema DnQm="D2Q9"/>
+		</method>
+		<result>
+			<time_step interval="25"/>
+			<result_field list="( Speed )"/>
+			<file filename="Output_CXS" format="VTK_leg_bin_ima"/>
+		</result>
+	</dyna_time>
+</InputCommands>
+
+<MyBeers>
+    <Brewery name="Founders Brewing Company" location="Grand Rapids, MI">
+        <Beer name="Centennial" description="IPA" rating="A+" dateSampled="01/02/2011">
+            "What an excellent IPA. This is the most delicious beer I have ever tasted!"
+        </Beer>
+        <Beer name="Centennial2" description="IPA2" rating="A+2" dateSampled="02/02/2011">
+            "same same"
+        </Beer>
+    </Brewery>
+
+    <Brewery name="Brewery Vivant" location="Grand Rapids, MI">
+        <Beer name="Farmhouse Ale" description="Belgian Ale" rating="B" dateSampled="02/07/2015">
+            This beer is not so good... but I am not that big of a fan of english style ales.
+        </Beer>
+    </Brewery>
+</MyBeers>

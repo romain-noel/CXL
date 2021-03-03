@@ -1,20 +1,8 @@
 ### MakeFile from Romain NOEL
 ##  To compile CXL 
 
-### Compilers options
-## C Gnu compiler
-CC=gcc
-CFLAGS=-Wall -O
-## C++ Gnu Compiler
-CPPFLAG=gcc -xc++ -std=c++17 -shared-libgcc
-CXX=g++
-CXXFLAGS=-g
-FASTCXXFLAGS=-DNO_DEBUG -O6 -malign-double -funroll-all-loops
-LDFLAGS=
-## Librairies
-LIBS=
-## Includes
-INCLU=
+### PATHS
+
 ## Directories 
 # PROJDIR= $(realpath $(CURDIR)/..)
 PROJDIR= ..
@@ -32,6 +20,24 @@ VPATH= $(SOURCEDIRS)
 SRCFILES= $(foreach dir, $(SRCSUBDIRS), $(wildcard $(dir)/*.cpp))
 OBJFILES= $(subst $(SRCDIR), $(BUILDIR), $(SRCFILES:.cpp=.o))
 DEPS := $(OBJFILES:.o=.d)
+
+## Librairies
+LIBS= $(PROJDIR)/lib/rapidxml-1.13
+## Includes
+LIBINCLUDE= $(PROJDIR)/lib/rapidxml-1.13
+INCLU=
+
+### Compilers options
+## C Gnu compiler
+CC=gcc
+CFLAGS=-Wall -O
+## C++ Gnu Compiler
+CXX=g++ -std=c++17
+CXXFLAGS=-g
+FASTCXXFLAGS=-DNO_DEBUG -O6 -malign-double -funroll-all-loops
+LDFLAGS=
+CFLAGS += -I$(LIBINCLUDE)
+LDFLAGS += -L$(LIBS)
 ## Executable file to generate
 EXEC= prog
 
